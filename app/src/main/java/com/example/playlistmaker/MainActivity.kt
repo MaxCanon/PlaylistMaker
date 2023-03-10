@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import androidx.appcompat.widget.Toolbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,20 +24,7 @@ class MainActivity : AppCompatActivity() {
         imageSearch.setOnClickListener { navigateTo(SearchActivity::class.java) }
         imageLibrary.setOnClickListener { navigateTo(LibraryActivity::class.java) }
         imageSettings.setOnClickListener { navigateTo(SettingsActivity::class.java) }
-        /*imageSearch.setOnClickListener {
-            val searchIntent = Intent(this, SearchActivity::class.java)
-            startActivity(searchIntent)
-        } */
 
-        /* imageLibrary.setOnClickListener {
-            val libraryIntent = Intent(this, LibraryActivity::class.java)
-            startActivity(libraryIntent)
-        } */
-
-        /* imageSettings.setOnClickListener {
-            val settingsIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(settingsIntent)
-        } */
     }
 }
 

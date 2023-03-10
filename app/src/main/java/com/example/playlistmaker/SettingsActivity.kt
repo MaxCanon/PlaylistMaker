@@ -1,6 +1,6 @@
 package com.example.playlistmaker
 
-import android.content.Intent
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
@@ -16,11 +16,5 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-
-        /*val backToMainMenu = findViewById<Toolbar>(R.id.icon_arrow_back)
-
-        backToMainMenu.setOnClickListener {
-            finish()
-        } */
     }
 }
