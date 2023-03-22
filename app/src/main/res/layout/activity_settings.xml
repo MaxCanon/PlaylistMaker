@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/SettingsPageBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_settings"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_toolbar"
+        style="@style/ToolbarArrowColor"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_marginBottom="24dp"
-        app:navigationIcon="@drawable/icon_arrow_back">
+        android:layout_marginBottom="24dp">
 
         <TextView
+            style="@style/ToolbarTextColor"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@string/settings"
-            android:textColor="@color/main_text"
             android:textSize="@dimen/text_size22"
             android:textStyle="bold" />
 
@@ -29,24 +28,14 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_vertical"
+            style="@style/Settings_Texts"
             android:layout_marginEnd="70dp"
-            android:gravity="start"
-            android:paddingLeft="@dimen/padding_left"
-            android:text="@string/night_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size16" />
+            android:text="@string/night_theme" />
 
 
         <androidx.appcompat.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="@dimen/icon_margin_right"
-            app:thumbTint="@color/knob_color"
-            app:trackTint="@color/tint_color" />
+            android:id="@+id/night_theme"
+            style="@style/Settings_Images"/>
 
     </FrameLayout>
 
@@ -55,21 +44,12 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_vertical"
-            android:layout_marginEnd="@dimen/margin_right"
-            android:gravity="start"
-            android:paddingStart="@dimen/padding_left"
-            android:text="@string/share_app"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size16" />
+            style="@style/Settings_Texts"
+            android:text="@string/share_app" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="@dimen/icon_margin_right"
+            android:id="@+id/icon_share_btn"
+            style="@style/Settings_Images"
             android:src="@drawable/icon_share" />
 
 
@@ -80,21 +60,12 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_vertical"
-            android:layout_marginEnd="@dimen/margin_right"
-            android:gravity="start"
-            android:paddingStart="@dimen/padding_left"
-            android:text="@string/contact_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size16" />
+            style="@style/Settings_Texts"
+            android:text="@string/contact_support" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="@dimen/icon_margin_right"
+            android:id="@+id/support_btn"
+            style="@style/Settings_Images"
             android:src="@drawable/icon_support" />
 
 
@@ -105,21 +76,12 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_vertical"
-            android:layout_marginEnd="@dimen/margin_right"
-            android:gravity="start"
-            android:paddingStart="@dimen/padding_left"
-            android:text="@string/terms_of_service"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size16" />
+            style="@style/Settings_Texts"
+            android:text="@string/terms_of_service" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="@dimen/icon_margin_right"
+            android:id="@+id/terms_btn"
+            style="@style/Settings_Images"
             android:src="@drawable/icon_arrow_forward" />
 
 
