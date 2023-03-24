@@ -26,7 +26,7 @@ class SettingsActivity : AppCompatActivity() {
         share.setOnClickListener {
             val url = getString(R.string.url_address)
             val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
+            intent.type = getString(R.string.intent_type)
             intent.putExtra(Intent.EXTRA_TEXT, url)
             startActivity(intent)
         }

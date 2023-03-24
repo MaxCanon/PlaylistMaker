@@ -13,4 +13,5 @@
     <string name="email_address">bizkitman@yandex.by</string>
     <string name="terms">https://yandex.ru/legal/practicum_offer/</string>
     <string name="url_address">https://practicum.yandex.ru/android-developer/</string>
+    <string name="intent_type">text/plain</string>
 </resources>
