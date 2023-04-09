@@ -8,7 +8,7 @@
     <dimen name="text_size16">16sp</dimen>
     <dimen name="text_size22">22sp</dimen>
     <dimen name="padding_right">12dp</dimen>
-    <dimen name="margin_vertical">21dp</dimen>
+    <dimen name="margin_settings_text">21dp</dimen>
     <dimen name="margin_right">44dp</dimen>
 
 </resources>

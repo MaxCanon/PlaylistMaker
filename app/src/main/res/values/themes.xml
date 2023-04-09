@@ -12,6 +12,22 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:fontFamily">@font/ysdisplaymedium</item>
+        <item name="backgroundColor">@color/black</item>
+    </style>
+
+    <style name="MainPageBackground">
+        <item name="android:background">@color/background_main_page</item>
+    </style>
+
+    <style name="SettingsPageBackground">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="ToolbarTextColor">
+        <item name="android:textColor">@color/main_text</item>
+    </style>
+
+    <style name="ToolbarArrowColor">
+        <item name="navigationIcon">@drawable/icon_arrow_back</item>
     </style>
 </resources>
