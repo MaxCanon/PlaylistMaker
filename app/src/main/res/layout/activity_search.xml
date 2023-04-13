@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/SettingsPageBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,29 +34,22 @@
 
         <EditText
             android:id="@+id/input_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            style="@style/Input_Edit_Text"
             android:background="@drawable/round_edittext"
             android:drawableStart="@drawable/edittext_search_icon"
-            android:drawablePadding="8dp"
             android:hint="@string/input_hint"
-            android:inputType="text"
-            android:maxLines="1"
-            android:paddingVertical="10dp"
-            android:paddingStart="12dp"
-            android:textColor="@color/knob_color"
-            android:textColorHint="@color/knob_color"
             android:textCursorDrawable="@drawable/text_cursor_color" />
 
         <ImageView
             android:id="@+id/clearIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:src="@drawable/icon_clear_edittext"
-            android:visibility="gone" />
+            style="@style/Clear_Icon"
+            android:src="@drawable/icon_clear_edittext" />
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_recycle"
+        tools:listitem="@layout/track" />
 </LinearLayout>
