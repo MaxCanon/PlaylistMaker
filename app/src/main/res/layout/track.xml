@@ -35,7 +35,7 @@
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/Recycle_ArtistName_TrackTime"
-                android:maxEms="10"/>
+                android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/ellipse"
