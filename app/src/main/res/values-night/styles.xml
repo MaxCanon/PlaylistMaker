@@ -25,4 +25,68 @@
         <item name="trackTint">@color/switch_compat_track_night</item>
 
     </style>
+
+    <style name="Input_Edit_Text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:drawableTint">@color/main_text</item>
+        <item name="android:textColor">@color/main_text</item>
+        <item name="android:textColorHint">@color/main_text</item>
+
+    </style>
+
+    <style name="Clear_Icon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:tint">@color/main_text</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="Forward_Arrow_Icon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:layout_marginStart">@dimen/icon_margin</item>
+        <item name="android:layout_marginEnd">@dimen/icon_margin_right</item>
+    </style>
+
+    <style name="Recycle_Track_Name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:text">TextView</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="Recycle_ArtistName_TrackTime">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:text">TextView</item>
+        <item name="android:textSize">@dimen/text_size11</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="Ellipse">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:layout_marginStart">@dimen/text_margin_recycle</item>
+        <item name="android:layout_marginEnd">@dimen/text_margin_recycle</item>
+    </style>
+
 </resources>

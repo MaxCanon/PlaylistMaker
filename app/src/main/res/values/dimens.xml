@@ -2,14 +2,21 @@
 <resources>
     <dimen name="padding">8dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
+    <dimen name="icon_margin">8dp</dimen>
     <dimen name="icon_margin_right">12dp</dimen>
     <dimen name="padding_left">16dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
+    <dimen name="text_size11">11sp</dimen>
     <dimen name="text_size16">16sp</dimen>
     <dimen name="text_size22">22sp</dimen>
     <dimen name="padding_right">12dp</dimen>
     <dimen name="margin_settings_text">21dp</dimen>
     <dimen name="margin_right">44dp</dimen>
+    <dimen name="art_size_recycle">45dp</dimen>
+    <dimen name="art_margin_recycle">8dp</dimen>
+    <dimen name="text_margin_recycle">5dp</dimen>
+    <dimen name="image_radius">2dp</dimen>
+    <dimen name="top_margin_recycle">24dp</dimen>
 
 </resources>
 
