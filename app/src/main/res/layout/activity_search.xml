@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/SettingsPageBackground"
     android:layout_width="match_parent"
@@ -46,10 +47,43 @@
             android:src="@drawable/icon_clear_edittext" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_recycle_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/top_margin_recycle"
-        tools:listitem="@layout/track" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/top_margin_recycle"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <LinearLayout
+            android:id="@+id/placeholderMessage"
+            style="@style/placeholderMessage"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/noConnection"
+                style="@style/connectionProblem"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/nothingFoundImage"
+                style="@style/nothingToFoundImage"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvError"
+                style="@style/tvErrorMessage"
+                tools:targetApi="p" />
+
+            <Button
+                android:id="@+id/buttonUpdate"
+                style="@style/BtnUpdate"
+                android:visibility="gone"
+                app:cornerRadius="54dp" />
+        </LinearLayout>
+
+    </FrameLayout>
 </LinearLayout>
