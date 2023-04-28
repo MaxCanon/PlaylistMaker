@@ -39,6 +39,8 @@
             android:background="@drawable/round_edittext"
             android:drawableStart="@drawable/edittext_search_icon"
             android:hint="@string/input_hint"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:textCursorDrawable="@drawable/text_cursor_color" />
 
         <ImageView
@@ -55,7 +57,7 @@
             android:id="@+id/search_recycle_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/top_margin_recycle"
+            android:layout_marginTop="@dimen/margin_recycle"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <LinearLayout

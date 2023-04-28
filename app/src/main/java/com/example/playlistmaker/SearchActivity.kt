@@ -52,6 +52,7 @@ class SearchActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.search_toolbar)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
+        val updateButton = findViewById<Button>(R.id.buttonUpdate)
 
 
         interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -78,6 +79,10 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
+        updateButton.setOnClickListener {
+            search()
+        }
+
         trackAdapter = TrackAdapter(trackList)
         recycleViewTracks = findViewById(R.id.search_recycle_view)
         recycleViewTracks.adapter = trackAdapter
@@ -89,8 +94,6 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
-
-
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -125,7 +128,6 @@ class SearchActivity : AppCompatActivity() {
         text = savedInstanceState.getString(EDIT_TEXT).toString()
         inputEditText.setText(text)
     }
-
 
     @SuppressLint("WrongViewCast", "NotifyDataSetChanged")
     private fun showMessage(text: String, button: Boolean) {
@@ -179,9 +181,10 @@ class SearchActivity : AppCompatActivity() {
                                 false
                             )
                         } else {
-                            showMessage("",  false)
+                            showMessage("", false)
                         }
                     }
+
                     override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
                         showMessage(
                             getString(R.string.connection_problem),

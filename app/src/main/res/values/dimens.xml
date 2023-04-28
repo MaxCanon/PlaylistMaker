@@ -16,7 +16,11 @@
     <dimen name="art_margin_recycle">8dp</dimen>
     <dimen name="text_margin_recycle">5dp</dimen>
     <dimen name="image_radius">2dp</dimen>
-    <dimen name="top_margin_recycle">24dp</dimen>
+    <dimen name="margin_recycle">24dp</dimen>
+    <dimen name="padding_start_end">14dp</dimen>
+    <dimen name="padding_top_bottom">10dp</dimen>
+    <dimen name="text_error_message">19sp</dimen>
+    <dimen name="text_update_button">14sp</dimen>
 
 </resources>
 
