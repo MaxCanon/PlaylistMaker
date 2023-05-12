@@ -165,6 +165,31 @@
         <item name="android:paddingBottom">@dimen/padding_top_bottom</item>
         <item name="android:text">@string/Update</item>
         <item name="android:textSize">@dimen/text_update_button</item>
-
     </style>
+
+    <style name="SearchHistory">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">26dp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/search_history</item>
+        <item name="android:textColor">@color/main_text</item>
+        <item name="android:textSize">@dimen/text_error_message</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ClearHistory">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:backgroundTint">@color/main_text</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:text">@string/clear_history</item>
+        <item name="android:textSize">@dimen/text_update_button</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>
