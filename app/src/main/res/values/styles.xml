@@ -20,6 +20,10 @@
 
     </style>
 
+    <style name="BackgroundColor">
+        <item name="android:background">@color/white</item>
+    </style>
+
     <style name="Settings_Texts">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -184,6 +188,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_marginTop">24dp</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:backgroundTint">@color/main_text</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:text">@string/clear_history</item>

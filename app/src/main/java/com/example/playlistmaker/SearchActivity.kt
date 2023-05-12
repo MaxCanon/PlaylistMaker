@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -105,18 +106,13 @@ class SearchActivity : AppCompatActivity() {
             trackAdapter.notifyDataSetChanged()
         }
 
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
+        val simpleTextWatcher = inputEditText.doOnTextChanged {text, _, _, _ ->
+            this@SearchActivity.text = text.toString()
+            if (!text.isNullOrEmpty()) {
+                clearButton.visibility = View.VISIBLE
                 history()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                //
+            } else {
+                clearButton.visibility = View.GONE
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
