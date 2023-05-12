@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -106,7 +104,7 @@ class SearchActivity : AppCompatActivity() {
             trackAdapter.notifyDataSetChanged()
         }
 
-        val simpleTextWatcher = inputEditText.doOnTextChanged {text, _, _, _ ->
+        val simpleTextWatcher = inputEditText.doOnTextChanged { text, _, _, _ ->
             this@SearchActivity.text = text.toString()
             if (!text.isNullOrEmpty()) {
                 clearButton.visibility = View.VISIBLE
@@ -119,30 +117,30 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hideButtons() {
-        val update = findViewById<Button>(R.id.buttonUpdate)
+        val srcHistory = findViewById<TextView>(R.id.searchHistory)
         val clear = findViewById<Button>(R.id.buttonClearHistory)
-        update.visibility = View.GONE
+        srcHistory.visibility = View.GONE
         clear.visibility = View.GONE
     }
 
     private fun history() {
-        val update = findViewById<Button>(R.id.buttonUpdate)
+        val srcHistory = findViewById<TextView>(R.id.searchHistory)
         val clear = findViewById<Button>(R.id.buttonClearHistory)
-        update.visibility = View.GONE
+        srcHistory.visibility = View.GONE
         clear.visibility = View.GONE
         trackAdapter.trackList = trackList
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun focusVisibility(hasFocus: Boolean) {
-        val update = findViewById<Button>(R.id.buttonUpdate)
+        val srcHistory = findViewById<TextView>(R.id.searchHistory)
         val clear = findViewById<Button>(R.id.buttonClearHistory)
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         if (hasFocus && inputEditText.text.isEmpty() && historyList.isNotEmpty()) {
-            update.visibility = View.VISIBLE
+            srcHistory.visibility = View.VISIBLE
             clear.visibility = View.VISIBLE
         } else {
-            update.visibility = View.GONE
+            srcHistory.visibility = View.GONE
             clear.visibility = View.GONE
         }
         trackAdapter.trackList = historyList
@@ -151,9 +149,9 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showHistory() {
-        val update = findViewById<Button>(R.id.buttonUpdate)
+        val srcHistory = findViewById<TextView>(R.id.searchHistory)
         val clear = findViewById<Button>(R.id.buttonClearHistory)
-        update.visibility = View.VISIBLE
+        srcHistory.visibility = View.VISIBLE
         clear.visibility = View.VISIBLE
         historyList = SearchHistory.fillInList()
         trackAdapter.trackList = historyList
