@@ -36,6 +36,8 @@ object SearchHistory {
     }
 
     fun clear() {
-        createJsonFromTrackList(ArrayList<Track>())
+        App.sharedMemory.edit()
+            .remove(HISTORY)
+            .apply()
     }
 }

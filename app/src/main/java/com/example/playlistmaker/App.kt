@@ -3,6 +3,7 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 
 class App : Application() {
 
@@ -29,8 +30,8 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-        sharedMemory.edit()
-            .putBoolean(KEY_THEME, darkTheme)
-            .apply()
+        sharedMemory.edit {
+            putBoolean(KEY_THEME, darkTheme)
+        }
     }
 }
