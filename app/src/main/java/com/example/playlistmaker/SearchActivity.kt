@@ -151,8 +151,13 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistory() {
         val srcHistory = findViewById<TextView>(R.id.searchHistory)
         val clear = findViewById<Button>(R.id.buttonClearHistory)
-        srcHistory.visibility = View.VISIBLE
-        clear.visibility = View.VISIBLE
+        if (historyList.isNotEmpty()) {
+            srcHistory.visibility = View.VISIBLE
+            clear.visibility = View.VISIBLE
+        } else {
+            srcHistory.visibility = View.GONE
+            clear.visibility = View.GONE
+        }
         historyList = SearchHistory.fillInList()
         trackAdapter.trackList = historyList
         trackAdapter.notifyDataSetChanged()
