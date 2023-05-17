@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 
 class SettingsActivity : AppCompatActivity() {
@@ -18,6 +19,16 @@ class SettingsActivity : AppCompatActivity() {
         val share = findViewById<ImageView>(R.id.icon_share_btn)
         val support = findViewById<ImageView>(R.id.support_btn)
         val terms = findViewById<ImageView>(R.id.terms_btn)
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.night_theme)
+
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+
+        if ((applicationContext as App).darkTheme) {
+            themeSwitcher.isChecked = true
+        }
 
         toolbar.setNavigationOnClickListener {
             finish()

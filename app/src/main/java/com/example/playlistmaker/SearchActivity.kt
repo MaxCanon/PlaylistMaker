@@ -4,14 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -29,6 +28,7 @@ class SearchActivity : AppCompatActivity() {
     private val baseUrl = "http://itunes.apple.com"
     private val trackList = ArrayList<Track>()
     private val interceptor = HttpLoggingInterceptor()
+    private var historyList = ArrayList<Track>()
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(interceptor)
@@ -45,6 +45,7 @@ class SearchActivity : AppCompatActivity() {
         const val EDIT_TEXT = "EDIT_TEXT"
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -53,9 +54,14 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         val inputEditText = findViewById<EditText>(R.id.input_edit_text)
         val updateButton = findViewById<Button>(R.id.buttonUpdate)
+        val clearHistoryButton = findViewById<Button>(R.id.buttonClearHistory)
 
 
         interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        inputEditText.setOnFocusChangeListener { v, hasFocus ->
+            focusVisibility(hasFocus)
+        }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -75,6 +81,7 @@ class SearchActivity : AppCompatActivity() {
             closeKeyboard(inputEditText)
             trackList.clear()
             placeholder.visibility = View.GONE
+            showHistory()
             trackAdapter.notifyDataSetChanged()
 
         }
@@ -83,32 +90,77 @@ class SearchActivity : AppCompatActivity() {
             search()
         }
 
-        trackAdapter = TrackAdapter(trackList)
+        trackAdapter = TrackAdapter()
+        trackAdapter.trackList = trackList
+        historyList.clear()
+        historyList = SearchHistory.fillInList()
         recycleViewTracks = findViewById(R.id.search_recycle_view)
         recycleViewTracks.adapter = trackAdapter
 
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //
-            }
+        clearHistoryButton.setOnClickListener {
+            SearchHistory.clear()
+            historyList.clear()
+            hideButtons()
+            trackAdapter.notifyDataSetChanged()
+        }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                //
+        val simpleTextWatcher = inputEditText.doOnTextChanged { text, _, _, _ ->
+            this@SearchActivity.text = text.toString()
+            if (!text.isNullOrEmpty()) {
+                clearButton.visibility = View.VISIBLE
+                history()
+            } else {
+                clearButton.visibility = View.GONE
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
+    private fun hideButtons() {
+        val srcHistory = findViewById<TextView>(R.id.searchHistory)
+        val clear = findViewById<Button>(R.id.buttonClearHistory)
+        srcHistory.visibility = View.GONE
+        clear.visibility = View.GONE
+    }
+
+    private fun history() {
+        val srcHistory = findViewById<TextView>(R.id.searchHistory)
+        val clear = findViewById<Button>(R.id.buttonClearHistory)
+        srcHistory.visibility = View.GONE
+        clear.visibility = View.GONE
+        trackAdapter.trackList = trackList
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun focusVisibility(hasFocus: Boolean) {
+        val srcHistory = findViewById<TextView>(R.id.searchHistory)
+        val clear = findViewById<Button>(R.id.buttonClearHistory)
+        val inputEditText = findViewById<EditText>(R.id.input_edit_text)
+        if (hasFocus && inputEditText.text.isEmpty() && historyList.isNotEmpty()) {
+            srcHistory.visibility = View.VISIBLE
+            clear.visibility = View.VISIBLE
         } else {
-            View.VISIBLE
+            srcHistory.visibility = View.GONE
+            clear.visibility = View.GONE
         }
+        trackAdapter.trackList = historyList
+        trackAdapter.notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showHistory() {
+        val srcHistory = findViewById<TextView>(R.id.searchHistory)
+        val clear = findViewById<Button>(R.id.buttonClearHistory)
+        historyList = SearchHistory.fillInList()
+        if (historyList.isNotEmpty()) {
+            srcHistory.visibility = View.VISIBLE
+            clear.visibility = View.VISIBLE
+        } else {
+            srcHistory.visibility = View.GONE
+            clear.visibility = View.GONE
+        }
+        trackAdapter.trackList = historyList
+        trackAdapter.notifyDataSetChanged()
     }
 
     private fun closeKeyboard(view: View) {
