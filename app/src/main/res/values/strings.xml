@@ -19,4 +19,11 @@
     <string name="Update">Обновить</string>
     <string name="search_history">История поиска</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="durationTrack">Длительность</string>
+    <string name="albumTrack">Альбом</string>
+    <string name="yearTrack">Год</string>
+    <string name="genreTrack">Жанр</string>
+    <string name="countryTrack">Страна</string>
+    <string name="time030">0:30</string>
+
 </resources>
