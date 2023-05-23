@@ -1,9 +1,11 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.App.Companion.TRACK
 import com.example.playlistmaker.SearchHistory.addTrack
 
 class TrackAdapter() : RecyclerView.Adapter<TrackHolder>() {
@@ -19,9 +21,13 @@ class TrackAdapter() : RecyclerView.Adapter<TrackHolder>() {
     }
 
     override fun onBindViewHolder(holder: TrackHolder, position: Int) {
-        holder.bind(trackList[position])
+        val trackPosition  = trackList[position]
+        holder.bind(trackPosition)
         holder.itemView.setOnClickListener {
-            addTrack(trackList[position])
+            addTrack(trackPosition)
+            val intent = Intent(it.context, AudioPlayerActivity::class.java)
+            intent.putExtra(TRACK, trackPosition)
+            it.context.startActivity(intent)
         }
     }
 

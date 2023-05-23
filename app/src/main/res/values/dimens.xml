@@ -21,6 +21,10 @@
     <dimen name="padding_top_bottom">10dp</dimen>
     <dimen name="text_error_message">19sp</dimen>
     <dimen name="text_update_button">14sp</dimen>
+    <dimen name="radius_album">8dp</dimen>
+    <dimen name="margin8dp">8dp</dimen>
+    <dimen name="margin63dp">63dp</dimen>
+    <dimen name="margin84dp">84dp</dimen>
 
 </resources>
 

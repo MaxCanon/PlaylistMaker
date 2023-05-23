@@ -13,6 +13,7 @@ class App : Application() {
         lateinit var sharedMemory: SharedPreferences
         const val PREFERENCES = "preferences"
         const val KEY_THEME = "key"
+        const val TRACK = "track"
     }
 
     override fun onCreate() {
