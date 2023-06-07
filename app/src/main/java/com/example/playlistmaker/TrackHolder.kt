@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.App.Companion.formatTime
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,7 +20,7 @@ class TrackHolder(private val item: View) : RecyclerView.ViewHolder(item) {
     fun bind(musTrack: Track) {
         trackName.text = musTrack.trackName
         artistName.text = musTrack.artistName
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(musTrack.trackTimeMillis)
+        trackTime.text = formatTime(musTrack.trackTimeMillis)
 
         Glide
             .with(item.context)

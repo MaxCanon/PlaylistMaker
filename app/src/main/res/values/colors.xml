@@ -15,6 +15,9 @@
     <color name="tint_color">#E6E8EB</color>
     <color name="switch_compat_knob_night">#3772E7</color>
     <color name="switch_compat_track_night">#9FBCF4</color>
+    <color name="progressBar">#6200EE</color>
+    <color name="pause">#1A1B22</color>
+    <color name="play">#1A1B22</color>
 
 
 </resources>
