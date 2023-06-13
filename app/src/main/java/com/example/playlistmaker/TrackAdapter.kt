@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.App.Companion.TRACK
 import com.example.playlistmaker.SearchHistory.addTrack
 
-class TrackAdapter() : RecyclerView.Adapter<TrackHolder>() {
+class TrackAdapter(private val clickListener: MovieClickListener) : RecyclerView.Adapter<TrackHolder>() {
     var trackList = ArrayList<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackHolder {
         val item: View =
@@ -25,14 +25,16 @@ class TrackAdapter() : RecyclerView.Adapter<TrackHolder>() {
         holder.bind(trackPosition)
         holder.itemView.setOnClickListener {
             addTrack(trackPosition)
-            val intent = Intent(it.context, AudioPlayerActivity::class.java)
-            intent.putExtra(TRACK, trackPosition)
-            it.context.startActivity(intent)
+            clickListener.onMovieClick(trackList[position])
         }
     }
 
 
     override fun getItemCount(): Int {
         return trackList.size
+    }
+
+    fun interface MovieClickListener {
+        fun onMovieClick(track: Track)
     }
 }
