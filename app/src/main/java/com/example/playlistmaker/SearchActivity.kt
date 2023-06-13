@@ -49,8 +49,8 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val EDIT_TEXT = "EDIT_TEXT"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY_ML = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY_ML = 2000L
     }
 
     private var isClickAllowed = true
@@ -97,7 +97,7 @@ class SearchActivity : AppCompatActivity() {
         trackAdapter = TrackAdapter {
             if(clickDebounce()) {
                 val intent = Intent(this, AudioPlayerActivity::class.java)
-                intent.putExtra(TRACK, Gson().toJson(it))
+                intent.putExtra(TRACK, it)
                 startActivity(intent)
             }
         }
@@ -131,7 +131,7 @@ class SearchActivity : AppCompatActivity() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY_ML)
         }
         return current
     }
@@ -212,7 +212,7 @@ class SearchActivity : AppCompatActivity() {
     }
     private fun searchDebounce() {
         handler.removeCallbacks(runnable)
-        handler.postDelayed(runnable, SEARCH_DEBOUNCE_DELAY)
+        handler.postDelayed(runnable, SEARCH_DEBOUNCE_DELAY_ML)
     }
 
     private fun search() {
@@ -228,9 +228,9 @@ class SearchActivity : AppCompatActivity() {
                         response: Response<TrackResponse>
                     ) {
                         Log.d("TRACK", "onResponse $response")
+                        binding.progressBar.visibility = View.GONE
+                        binding.searchRecycleView.visibility = View.VISIBLE
                         if (response.code() == 200) {
-                            binding.progressBar.visibility = View.GONE
-                            binding.searchRecycleView.visibility = View.VISIBLE
                             trackList.clear()
                         }
                         if (response.body()?.results?.isNotEmpty() == true) {

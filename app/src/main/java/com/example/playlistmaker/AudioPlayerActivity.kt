@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,11 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.App.Companion.TRACK
-import com.example.playlistmaker.App.Companion.formatTime
+import com.example.playlistmaker.DateUtils.formatTime
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.google.gson.Gson
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 class AudioPlayerActivity() : AppCompatActivity() {
@@ -24,7 +23,7 @@ class AudioPlayerActivity() : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val DELAY_MILLIS = 1000L
+        private const val DELAY_MILLIS_MS = 1000L
     }
 
     private val mediaPlayer = MediaPlayer()
@@ -33,7 +32,7 @@ class AudioPlayerActivity() : AppCompatActivity() {
     private val runnable: Runnable by lazy {
         Runnable {
             binding.durationTrackPlay.text = formatTime(mediaPlayer.currentPosition.toLong())
-            handler.postDelayed(runnable, DELAY_MILLIS)
+            handler.postDelayed(runnable, DELAY_MILLIS_MS)
         }
     }
 
@@ -46,9 +45,11 @@ class AudioPlayerActivity() : AppCompatActivity() {
             finish()
         }
 
-        val json = intent.getStringExtra(TRACK)!!
-
-        val track = Gson().fromJson(json, Track::class.java)
+        val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(TRACK, Track::class.java)
+        } else {
+            intent.getParcelableExtra(TRACK)
+        } as Track
 
         goToPlayer(track)
         preparePlayer(track.previewUrl)
@@ -70,6 +71,7 @@ class AudioPlayerActivity() : AppCompatActivity() {
         mediaPlayer.release()
         handler.removeCallbacks(runnable)
     }
+
     private fun goToPlayer(track: Track) = with(binding) {
         trackName.text = track.trackName
         artistName.text = track.artistName
@@ -91,6 +93,7 @@ class AudioPlayerActivity() : AppCompatActivity() {
             .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.radius_album)))
             .into(albumCover)
     }
+
     private fun preparePlayer(url: String) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
@@ -113,12 +116,14 @@ class AudioPlayerActivity() : AppCompatActivity() {
         playerState = STATE_PLAYING
         handler.post(runnable)
     }
+
     private fun pausePlayer() {
         mediaPlayer.pause()
         binding.playButton.setImageResource(R.drawable.play_button)
         handler.removeCallbacks(runnable)
         playerState = STATE_PAUSED
     }
+
     private fun playbackControl() {
         when (playerState) {
             STATE_PLAYING -> {

@@ -17,9 +17,7 @@ class App : Application() {
         const val KEY_THEME = "key"
         const val TRACK = "track"
         var themeDark = false
-        fun formatTime(millis : Long) : String {
-            return SimpleDateFormat("mm:ss", Locale.getDefault()).format(millis)
-        }
+
     }
 
     override fun onCreate() {

@@ -6,9 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.App.Companion.formatTime
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.playlistmaker.DateUtils.formatTime
 
 class TrackHolder(private val item: View) : RecyclerView.ViewHolder(item) {
     private var imageAlbum: ImageView = item.findViewById(R.id.album_image)
