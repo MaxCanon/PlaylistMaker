@@ -1,12 +1,13 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.App.Companion.TRACK
-import com.example.playlistmaker.SearchHistory.addTrack
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.SearchHistory.addTrack
+import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.presentation.holder.TrackHolder
 
 class TrackAdapter(private val clickListener: MovieClickListener) : RecyclerView.Adapter<TrackHolder>() {
     var trackList = ArrayList<Track>()

@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.audioplayer
 
 import android.media.MediaPlayer
 import android.os.Build
@@ -9,10 +9,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.App.Companion.TRACK
-import com.example.playlistmaker.DateUtils.formatTime
+import com.example.playlistmaker.presentation.app.App.Companion.TRACK
+import com.example.playlistmaker.presentation.dateutils.DateUtils.formatTime
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.google.gson.Gson
+import com.example.playlistmaker.domain.model.Track
 
 
 class AudioPlayerActivity() : AppCompatActivity() {
