@@ -13,7 +13,7 @@ import com.example.playlistmaker.presentation.app.App.Companion.TRACK
 import com.example.playlistmaker.presentation.dateutils.DateUtils.formatTime
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.domain.models.Track
 
 
 class AudioPlayerActivity() : AppCompatActivity() {

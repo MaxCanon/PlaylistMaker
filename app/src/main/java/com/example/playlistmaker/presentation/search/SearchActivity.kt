@@ -16,13 +16,15 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.presentation.app.App.Companion.TRACK
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.SearchHistory
-import com.example.playlistmaker.data.dto.TrackResponse
-import com.example.playlistmaker.data.network.TrackApi
+import com.example.playlistmaker.data.SearchRepository
+import com.example.playlistmaker.data.dto.TracksSearchResponse
+import com.example.playlistmaker.domain.network.ItunesApi
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.domain.model.Track
-import com.example.playlistmaker.presentation.adapter.TrackAdapter
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.app.App
 import com.example.playlistmaker.presentation.audioplayer.AudioPlayerActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -36,11 +38,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var recycleViewTracks: RecyclerView
+    private lateinit var searchHistory: SearchRepository
     private var text: String = ""
     private val baseUrl = "http://itunes.apple.com"
     private val trackList = ArrayList<Track>()
     private val interceptor = HttpLoggingInterceptor()
     private var historyList = ArrayList<Track>()
+
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(interceptor)
@@ -51,7 +55,7 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val trackApi = retrofit.create(TrackApi::class.java)
+    private val trackApi = retrofit.create(ItunesApi::class.java)
 
     companion object {
         const val EDIT_TEXT = "EDIT_TEXT"
@@ -100,7 +104,9 @@ class SearchActivity : AppCompatActivity() {
             search()
         }
 
+        searchHistory = SearchRepository(applicationContext)
         trackAdapter = TrackAdapter {
+            searchHistory.addTrack(it)
             if(clickDebounce()) {
                 val intent = Intent(this, AudioPlayerActivity::class.java)
                 intent.putExtra(TRACK, it)
@@ -109,12 +115,12 @@ class SearchActivity : AppCompatActivity() {
         }
         trackAdapter.trackList = trackList
         historyList.clear()
-        historyList = SearchHistory.fillInList()
+        historyList = fillInList()
         recycleViewTracks = findViewById(R.id.search_recycle_view)
         recycleViewTracks.adapter = trackAdapter
 
         binding.buttonClearHistory.setOnClickListener {
-            SearchHistory.clear()
+            clear()
             historyList.clear()
             hideButtons()
             trackAdapter.notifyDataSetChanged()
@@ -168,7 +174,7 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showHistory() {
-        historyList = SearchHistory.fillInList()
+        historyList = fillInList()
         if (historyList.isNotEmpty()) {
             binding.searchHistory.visibility = View.VISIBLE
             binding.buttonClearHistory.visibility = View.VISIBLE
@@ -216,6 +222,20 @@ class SearchActivity : AppCompatActivity() {
             binding.placeholderMessage.visibility = View.GONE
         }
     }
+    private fun clear() {
+        App.sharedMemory.edit()
+            .remove(SearchRepository.HISTORY)
+            .apply()
+    }
+    private fun fillInList(): ArrayList<Track> {
+        var historyList = ArrayList<Track>()
+        val getShare = App.sharedMemory.getString(SearchRepository.HISTORY, null)
+        if (!getShare.isNullOrEmpty()) {
+            val sType = object : TypeToken<ArrayList<Track>>() {}.type
+            historyList = Gson().fromJson(getShare, sType)
+        }
+        return historyList
+    }
     private fun searchDebounce() {
         handler.removeCallbacks(runnable)
         handler.postDelayed(runnable, SEARCH_DEBOUNCE_DELAY_ML)
@@ -227,11 +247,11 @@ class SearchActivity : AppCompatActivity() {
             binding.searchRecycleView.visibility = View.GONE
             binding.nothingFoundImage.visibility = View.GONE
             trackApi.search(binding.inputEditText.text.toString())
-                .enqueue(object : Callback<TrackResponse> {
+                .enqueue(object : Callback<TracksSearchResponse> {
                     @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(
-                        call: Call<TrackResponse>,
-                        response: Response<TrackResponse>
+                        call: Call<TracksSearchResponse>,
+                        response: Response<TracksSearchResponse>
                     ) {
                         Log.d("TRACK", "onResponse $response")
                         binding.progressBar.visibility = View.GONE
@@ -255,7 +275,7 @@ class SearchActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
                         showMessage(
                             getString(R.string.connection_problem),
                             true
