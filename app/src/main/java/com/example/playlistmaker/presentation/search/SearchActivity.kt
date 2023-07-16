@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.presentation.app.App.Companion.TRACK
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.SearchRepository
-import com.example.playlistmaker.data.dto.TracksSearchResponse
-import com.example.playlistmaker.domain.network.ItunesApi
+import com.example.playlistmaker.data.dto.MusicSearchResponse
+import com.example.playlistmaker.data.network.ItunesApi
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.app.App
@@ -247,11 +247,11 @@ class SearchActivity : AppCompatActivity() {
             binding.searchRecycleView.visibility = View.GONE
             binding.nothingFoundImage.visibility = View.GONE
             trackApi.search(binding.inputEditText.text.toString())
-                .enqueue(object : Callback<TracksSearchResponse> {
+                .enqueue(object : Callback<MusicSearchResponse> {
                     @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(
-                        call: Call<TracksSearchResponse>,
-                        response: Response<TracksSearchResponse>
+                        call: Call<MusicSearchResponse>,
+                        response: Response<MusicSearchResponse>
                     ) {
                         Log.d("TRACK", "onResponse $response")
                         binding.progressBar.visibility = View.GONE
@@ -275,7 +275,7 @@ class SearchActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<MusicSearchResponse>, t: Throwable) {
                         showMessage(
                             getString(R.string.connection_problem),
                             true

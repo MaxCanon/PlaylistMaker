@@ -1,17 +1,17 @@
 package com.example.playlistmaker
 
-import com.example.playlistmaker.data.TracksRepositoryImpl
-import com.example.playlistmaker.domain.network.RetrofitNetworkClient
-import com.example.playlistmaker.domain.api.TracksInteractor
-import com.example.playlistmaker.domain.api.TracksRepository
-import com.example.playlistmaker.domain.impl.TracksInteractorImpl
+import com.example.playlistmaker.data.network.MusicRepositoryImpl
+import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.domain.api.MusicInteractor
+import com.example.playlistmaker.domain.api.MusicRepository
+import com.example.playlistmaker.domain.impl.MusicInteractorImpl
 
 object Creator {
-    private fun getTracksRepository(): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
+    private fun getTracksRepository(): MusicRepository {
+        return MusicRepositoryImpl(RetrofitNetworkClient())
     }
 
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
+    fun provideTracksInteractor(): MusicInteractor {
+        return MusicInteractorImpl(getTracksRepository())
     }
 }

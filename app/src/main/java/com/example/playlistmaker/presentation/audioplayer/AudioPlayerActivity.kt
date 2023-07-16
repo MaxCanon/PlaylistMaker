@@ -1,10 +1,10 @@
 package com.example.playlistmaker.presentation.audioplayer
 
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -13,38 +13,123 @@ import com.example.playlistmaker.presentation.app.App.Companion.TRACK
 import com.example.playlistmaker.presentation.dateutils.DateUtils.formatTime
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.example.playlistmaker.domain.impl.MusicPlayerInteractorImpl
+import com.example.playlistmaker.data.MusicTrackRepositoryImpl
 import com.example.playlistmaker.domain.models.Track
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class AudioPlayerActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityAudioPlayerBinding
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val DELAY_MILLIS_MS = 1000L
+    lateinit var mediaPlayer : MusicPlayerInteractorImpl
+
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var durationRunnable: Runnable
+
+    private fun setUiBehaviour() {
+        this.durationRunnable = Runnable {
+            changeDuration()
+            handler.postDelayed(durationRunnable, 100)
+        }
+
+        binding.backButton.setOnClickListener { finish() }
+
+        binding.playButton.setOnClickListener {
+            if (mediaPlayer.isPlaying()) mediaPlayer.pauseMusic()
+            else mediaPlayer.playMusic()
+        }
+
     }
 
-    private val mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
-    private val handler = Handler(Looper.getMainLooper())
-    private val runnable: Runnable by lazy {
-        Runnable {
-            binding.durationTrackPlay.text = formatTime(mediaPlayer.currentPosition.toLong())
-            handler.postDelayed(runnable, DELAY_MILLIS_MS)
+    private fun getFullDurationFromLong(duration: Long): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(duration)
+    }
+
+    private fun showTrackInfo(track: Track): Boolean {
+        val dateFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+        val date = dateFormat.parse(track.releaseDate)
+        val milliseconds = date.time
+        val releaseYear = SimpleDateFormat("yyyy", Locale.getDefault()).format(milliseconds)
+
+        with(binding) {
+            trackName.text = track.trackName
+            artistName.text = track.artistName
+            trackAlbum.text = track.collectionName.toString()
+            trackGenre.text = track.primaryGenreName
+            trackCountry.text = track.country
+            trackDuration.text = getFullDurationFromLong(track.trackTimeMillis)
+            trackYear.text = releaseYear
+        }
+
+        val artWorkHQ = track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+
+        val px = (this.baseContext.resources.displayMetrics.densityDpi
+                / DisplayMetrics.DENSITY_DEFAULT)
+
+        Glide
+            .with(binding.root.context)
+            .load(artWorkHQ)
+            .placeholder(R.drawable.placeholder)
+            .centerCrop()
+            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.radius_album)))
+            .into(binding.albumCover)
+
+        return true
+    }
+
+    private fun changeBtnPlayPause(state: ButtonState) {
+        if (state == ButtonState.BUTTON_PLAY) binding.playButton.setImageResource(R.drawable.play_button)
+        else binding.playButton.setImageResource(R.drawable.pause_button)
+    }
+
+    private fun trackPlayingTimeUpdate(start: Boolean) {
+        if (start) {
+            handler.post(durationRunnable)
+        } else {
+            handler.removeCallbacks(durationRunnable)
         }
     }
 
+    private fun changeDuration() {
+        binding.durationTrackPlay.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.getCurrentPos())
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        val musTrackRepo = MusicTrackRepositoryImpl(binding.root.context)
+        val currentTrack = musTrackRepo.getCurrentMusicTrack()
+        if (currentTrack != null) this.showTrackInfo(currentTrack)
+
+
+        val playerStateListener = MusicPlayerInteractorImpl.OnPlayerStateListener { playerState ->
+            when (playerState) {
+                MusicPlayerInteractorImpl.STATE_PREPARED -> changeBtnPlayPause(ButtonState.BUTTON_PLAY)
+                MusicPlayerInteractorImpl.STATE_PLAYING -> {
+                    changeBtnPlayPause(ButtonState.BUTTON_PAUSE)
+                    trackPlayingTimeUpdate(true)
+                }
+
+                MusicPlayerInteractorImpl.STATE_COMPLETE -> changeBtnPlayPause(ButtonState.BUTTON_PLAY)
+                MusicPlayerInteractorImpl.STATE_PAUSED -> {
+                    changeBtnPlayPause(ButtonState.BUTTON_PLAY)
+                    trackPlayingTimeUpdate(false)
+                }
+            }
+        }
         binding.backButton.setOnClickListener {
             finish()
         }
+
+        mediaPlayer = MusicPlayerInteractorImpl(musTrackRepo, playerStateListener)
+        mediaPlayer.preparePlayer()
+
+        setUiBehaviour()
 
         val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(TRACK, Track::class.java)
@@ -53,24 +138,22 @@ class AudioPlayerActivity() : AppCompatActivity() {
         } as Track
 
         goToPlayer(track)
-        preparePlayer(track.previewUrl)
 
-        binding.playButton.setOnClickListener {
-            playbackControl()
-        }
         binding.durationTrackPlay.setText(R.string.time_030)
 
     }
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        mediaPlayer.pauseMusic()
+        changeBtnPlayPause(ButtonState.BUTTON_PLAY)
+        trackPlayingTimeUpdate(false)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-        handler.removeCallbacks(runnable)
+        handler.removeCallbacks(durationRunnable)
+        mediaPlayer.turnOffPlayer()
     }
 
     private fun goToPlayer(track: Track) = with(binding) {
@@ -95,44 +178,9 @@ class AudioPlayerActivity() : AppCompatActivity() {
             .into(albumCover)
     }
 
-    private fun preparePlayer(url: String) {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            binding.playButton.isEnabled = true
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            binding.playButton.setImageResource(R.drawable.play_button)
-            playerState = STATE_PREPARED
-            binding.durationTrackPlay.setText(R.string.time_030)
-            handler.removeCallbacks(runnable)
 
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        binding.playButton.setImageResource(R.drawable.pause_button)
-        playerState = STATE_PLAYING
-        handler.post(runnable)
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        binding.playButton.setImageResource(R.drawable.play_button)
-        handler.removeCallbacks(runnable)
-        playerState = STATE_PAUSED
-    }
-
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
+    enum class ButtonState {
+        BUTTON_PLAY,
+        BUTTON_PAUSE
     }
 }
