@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.settings
 
 
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import com.example.playlistmaker.R
+import com.example.playlistmaker.presentation.app.App
 
 class SettingsActivity : AppCompatActivity() {
 
