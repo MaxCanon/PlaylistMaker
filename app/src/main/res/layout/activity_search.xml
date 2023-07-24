@@ -1,108 +1,148 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="@style/BackgroundColor">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/background_settings">
 
-    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        style="@style/SettingsPageBackground"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/settings_toolbar"
+        style="@style/ToolbarColor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="8dp"
+        app:navigationIcon="@drawable/icon_arrow_back">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/search_toolbar"
-            style="@style/ToolbarArrowColor"
+        <TextView
+            style="@style/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ys_display_regular"
+            android:gravity="center_vertical"
+            android:text="@string/input_hint"
+            android:textSize="@dimen/text_size22" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <FrameLayout
+        android:id="@+id/search_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/inputEditText"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                style="@style/ToolbarTextColor"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/search"
-                android:textSize="@dimen/text_size22"
-                android:textStyle="bold" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <LinearLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="@dimen/padding_left"
             android:background="@drawable/round_edittext"
-            android:orientation="horizontal">
+            android:drawableStart="@drawable/edittext_search_icon"
+            android:drawablePadding="@dimen/icon_margin"
+            android:drawableTint="@color/knob_color"
+            android:fontFamily="@font/ys_display_regular"
+            android:hint="@string/input_hint"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLength="255"
+            android:maxLines="1"
+            android:padding="@dimen/icon_margin"
+            android:paddingStart="12dp"
+            android:paddingEnd="32dp"
+            android:singleLine="true"
+            android:textColor="@color/main_text"
+            android:textColorHint="@color/knob_color"
+            android:textCursorDrawable="@drawable/color_coursor"
+            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
-            <EditText
-                android:id="@+id/input_edit_text"
-                style="@style/Input_Edit_Text"
-                android:background="@drawable/round_edittext"
-                android:drawableStart="@drawable/edittext_search_icon"
-                android:hint="@string/input_hint"
-                android:imeOptions="actionDone"
-                android:singleLine="true"
-                android:textCursorDrawable="@drawable/text_cursor_color" />
+        <ImageView
+            android:id="@+id/clearImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="12dp"
+            android:padding="@dimen/padding_left"
+            android:visibility="gone"
+            app:srcCompat="@drawable/icon_clear_edittext"
+            app:tint="@color/knob_color"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
 
-            <ImageView
-                android:id="@+id/clearIcon"
-                style="@style/Clear_Icon"
-                android:src="@drawable/icon_clear_edittext" />
-        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_gravity="center"
-            android:layout_marginTop="148dp"
-            android:indeterminateTint="@color/progressBar"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/searchHistory"
-            style="@style/SearchHistory"/>
+            android:indeterminateTint="@color/switch_compat_knob_night"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_recycle_view"
+            android:id="@+id/searchRecycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_recycle"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="24dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        <Button
-            android:id="@+id/buttonClearHistory"
-            style="@style/ClearHistory"
-            app:cornerRadius="54dp" />
+        <TextView
+            android:id="@+id/nothingFound"
+            style="@style/nothingToFoundImage"
+            android:layout_marginTop="88dp"
+            android:text="@string/nothing_was_found"
+            android:visibility="gone"
+            />
 
         <LinearLayout
-            android:id="@+id/placeholderMessage"
-            style="@style/placeholderMessage"
-            tools:ignore="UseCompoundDrawables">
+            android:id="@+id/internetProblem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="80dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
 
             <ImageView
-                android:id="@+id/noConnection"
-                style="@style/connectionProblem"
+                style="@style/problem_network"
+                android:layout_gravity="center_horizontal"
                 tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/nothingFoundImage"
-                style="@style/nothingToFoundImage"
-                tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/tvError"
-                style="@style/tvErrorMessage"
-                tools:targetApi="p" />
+                android:id="@+id/errorText"
+                style="@style/connectionProblem"
+                android:text="@string/connection_problem" />
 
             <Button
-                android:id="@+id/buttonUpdate"
+                android:id="@+id/refreshButton"
                 style="@style/BtnUpdate"
-                android:visibility="gone"
+                android:text="@string/update"
                 app:cornerRadius="54dp" />
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+
+        <LinearLayout
+            android:id="@+id/searchHistory_layout"
+            style="@style/searchHistory_layout"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/SearchHistory" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchHistoryRecycler"
+                style="@style/searchHistory_recyclerView"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <Button
+                android:id="@+id/clearHistoryButton"
+                style="@style/ClearHistory"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/clear_history"
+                app:cornerRadius="54dp" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

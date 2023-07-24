@@ -292,4 +292,40 @@
         <item name="android:src">@drawable/icon_arrow_back</item>
     </style>
 
+    <style name="searchHistory_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="problem_network" >
+        <item name="android:layout_width">120dp</item>
+        <item name="android:src">@drawable/apple_connection_problem</item>
+        <item name="android:layout_height">120dp</item>
+    </style>
+
+    <style name="background_settings">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">#F5F5F5</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="ToolbarColor">
+        <item name="navigationIconTint">@color/main_text</item>
+    </style>
+
+    <style name="textColor">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="searchHistory_recyclerView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingHorizontal" tools:ignore="NewApi">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+    </style>
 </resources>
