@@ -139,9 +139,6 @@
             <Button
                 android:id="@+id/clearHistoryButton"
                 style="@style/ClearHistory"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/ys_display_medium"
-                android:text="@string/clear_history"
                 app:cornerRadius="54dp" />
         </LinearLayout>
     </FrameLayout>
