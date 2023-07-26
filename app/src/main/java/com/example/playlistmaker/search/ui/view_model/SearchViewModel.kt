@@ -23,17 +23,17 @@ class SearchViewModel(
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
 
-    private val stateLive = MutableLiveData<SearchState>()
-    val stateLiveData: LiveData<SearchState> = stateLive
+    private val _stateLive = MutableLiveData<SearchState>()
+    val stateLiveData: LiveData<SearchState> = _stateLive
 
     private var latestSearchText: String? = null
 
-    private val clickLiveData = MutableLiveData<Boolean>()
-    fun observeClick(): LiveData<Boolean> = clickLiveData
+    private val _clickLiveData = MutableLiveData<Boolean>()
+    fun observeClick(): LiveData<Boolean> = _clickLiveData
 
     init {
         historyList.addAll(searchInteractor.getHistory())
-        stateLive.postValue(SearchState.SearchHistory(historyList))
+        _stateLive.postValue(SearchState.SearchHistory(historyList))
     }
 
     override fun onCleared() {
@@ -44,25 +44,25 @@ class SearchViewModel(
     fun search(query: String) {
         if (query.isEmpty()) return
 
-        stateLive.postValue(SearchState.Loading)
+        _stateLive.postValue(SearchState.Loading)
 
         searchInteractor.searchTracks(query,
             onSuccess = { trackList ->
-                stateLive.postValue(SearchState.SearchedTracks(trackList))
+                _stateLive.postValue(SearchState.SearchedTracks(trackList))
             },
             onError = { error ->
-                stateLive.postValue(SearchState.SearchError(error))
+                _stateLive.postValue(SearchState.SearchError(error))
             }
         )
     }
 
     fun clearHistory() {
         historyList.clear()
-        stateLive.postValue(SearchState.SearchHistory(historyList))
+        _stateLive.postValue(SearchState.SearchHistory(historyList))
     }
 
     fun clearSearchText() {
-        stateLive.postValue(SearchState.SearchHistory(historyList))
+        _stateLive.postValue(SearchState.SearchHistory(historyList))
     }
 
     fun addTrackToHistory(track: Track) {
@@ -85,7 +85,7 @@ class SearchViewModel(
 
         val searchRunnable = Runnable { search(changedText) }
 
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY_MILLIS
         handler.postAtTime(
             searchRunnable,
             SEARCH_REQUEST_TOKEN,
@@ -97,7 +97,7 @@ class SearchViewModel(
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY_MILLIS)
         }
         return current
     }
@@ -105,8 +105,8 @@ class SearchViewModel(
     companion object {
         private const val maxHistorySize = 10
         private val SEARCH_REQUEST_TOKEN = Any()
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
         fun getViewModelFactory(context: Context): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 SearchViewModel(Creator.provideSearchInteractor(context))

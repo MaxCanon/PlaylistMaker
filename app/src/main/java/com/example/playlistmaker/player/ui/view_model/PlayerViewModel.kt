@@ -15,24 +15,24 @@ import com.example.playlistmaker.util.Creator
 
 class PlayerViewModel(val playerInteractor: PlayerInteractor) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<PlayerState>()
-    fun observeState(): LiveData<PlayerState> = stateLiveData
+    private val _stateLiveData = MutableLiveData<PlayerState>()
+    fun observeState(): LiveData<PlayerState> = _stateLiveData
 
-    private val timeLiveData = MutableLiveData<String>()
-    fun observeTime(): LiveData<String> = timeLiveData
+    private val _timeLiveData = MutableLiveData<String>()
+    fun observeTime(): LiveData<String> = _timeLiveData
     private val handler = Handler(Looper.getMainLooper())
 
     private val time = object : Runnable {
         override fun run() {
             val position = playerInteractor.getPosition()
-            timeLiveData.postValue(position.formatTime())
+            _timeLiveData.postValue(position.formatTime())
             handler.postDelayed(this, DELAY_MILLIS)
         }
     }
 
     init {
         playerInteractor.setOnStateChangeListener { state ->
-            stateLiveData.postValue(state)
+            _stateLiveData.postValue(state)
             if (state == PlayerState.STATE_COMPLETE) handler.removeCallbacks(time)
         }
     }

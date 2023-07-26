@@ -8,7 +8,7 @@ import java.util.*
 
 class App : Application() {
     companion object {
-        const val EXAMPLE_PREFERENCES = "example_preferences"
+        private const val EXAMPLE_PREFERENCES = "example_preferences"
         const val KEY_THEME = "key"
         lateinit var sharedMemory: SharedPreferences
         const val TRACK = "track"

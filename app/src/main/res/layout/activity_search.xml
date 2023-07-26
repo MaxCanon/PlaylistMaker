@@ -118,7 +118,7 @@
 
             <Button
                 android:id="@+id/refreshButton"
-                style="@style/BtnUpdate"
+                style="@style/ClearHistory"
                 android:text="@string/update"
                 app:cornerRadius="54dp" />
         </LinearLayout>
