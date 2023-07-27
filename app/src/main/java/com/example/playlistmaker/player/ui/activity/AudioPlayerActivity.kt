@@ -14,10 +14,13 @@ import com.example.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.util.App.Companion.TRACK
 import com.example.playlistmaker.util.App.Companion.formatTime
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AudioPlayerActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityAudioPlayerBinding
-    private lateinit var playerVIewModel: PlayerViewModel
+    private val playerVIewModel by viewModel<PlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +30,6 @@ class AudioPlayerActivity() : AppCompatActivity() {
         binding.backButton.setOnClickListener {
             finish()
         }
-
-        playerVIewModel = ViewModelProvider(
-            this, PlayerViewModel
-                .getViewModelFactory()
-        )[PlayerViewModel::class.java]
 
 
         val track =
@@ -59,7 +57,8 @@ class AudioPlayerActivity() : AppCompatActivity() {
     private fun initViews(track: Track) = with(binding) {
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackDuration.text = track.trackTimeMillis.formatTime()
+        trackDuration.text = SimpleDateFormat("mm:ss", Locale.getDefault())
+            .format(track.trackTimeMillis)
         if (track.collectionName.isNullOrEmpty()) {
             trackAlbum.visibility = View.GONE
             album.visibility = View.GONE
