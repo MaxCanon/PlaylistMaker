@@ -10,34 +10,34 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySettingsBinding
+    private var binding: ActivitySettingsBinding? = null
     private val viewModel by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding?.root)
 
         initListeners()
 
-        binding.settingsToolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding?.settingsToolbar?.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         viewModel.themeSettingsState.observe(this) { themeSettings ->
-            binding.nightTheme.isChecked = themeSettings.darkTheme
+            binding?.nightTheme?.isChecked = themeSettings.darkTheme
         }
     }
 
     private fun initListeners() {
-        binding.iconShareBtn.setOnClickListener {
+        binding?.iconShareBtn?.setOnClickListener {
             viewModel.shareApp()
         }
-        binding.supportBtn.setOnClickListener {
+        binding?.supportBtn?.setOnClickListener {
             viewModel.supportEmail()
         }
-        binding.termsBtn.setOnClickListener {
+        binding?.termsBtn?.setOnClickListener {
             viewModel.openAgreement()
         }
-        binding.nightTheme.setOnCheckedChangeListener { _, checked ->
+        binding?.nightTheme?.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)
         }
     }
