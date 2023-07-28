@@ -11,7 +11,6 @@ import com.example.playlistmaker.settings.domain.interactor.SettingsInteractor
 import com.example.playlistmaker.settings.domain.model.ThemeSettings
 import com.example.playlistmaker.sharing.domain.interactor.SharingInteractor
 import com.example.playlistmaker.util.App
-import com.example.playlistmaker.util.Creator
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor,
@@ -45,19 +44,4 @@ class SettingsViewModel(
         sharingInteractor.openTerms()
     }
 
-    companion object {
-
-        fun getViewModelFactory(context: Context): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val application =
-                        this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as App
-                    SettingsViewModel(
-                        Creator.provideSettingsInteractor(context),
-                        Creator.provideSharingInteractor(context),
-                        application
-                    )
-                }
-            }
-    }
 }
