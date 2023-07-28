@@ -138,12 +138,12 @@ class SearchActivity : AppCompatActivity() {
                 binding?.searchRecycler?.visibility = View.GONE
                 binding?.internetProblem?.visibility = View.GONE
                 binding?.searchHistoryLayout?.visibility = View.GONE
-                binding?.nothingFound?.visibility = View.VISIBLE
+                binding?.nothingToFound?.visibility = View.VISIBLE
                 binding?.progressBar?.visibility = View.GONE
             }
             NetworkError.CONNECTION_ERROR -> {
                 binding?.searchRecycler?.visibility = View.GONE
-                binding?.nothingFound?.visibility = View.GONE
+                binding?.nothingToFound?.visibility = View.GONE
                 binding?.searchHistoryLayout?.visibility = View.GONE
                 binding?.internetProblem?.visibility = View.VISIBLE
                 binding?.progressBar?.visibility = View.GONE
@@ -152,7 +152,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clearContent() {
-        binding?.nothingFound?.visibility = View.GONE
+        binding?.nothingToFound?.visibility = View.GONE
         binding?.internetProblem?.visibility = View.GONE
         binding?.searchHistoryLayout?.visibility = View.GONE
         binding?.searchRecycler?.visibility = View.GONE
