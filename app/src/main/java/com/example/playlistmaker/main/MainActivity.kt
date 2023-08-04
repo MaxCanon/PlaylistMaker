@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.ui.activity.SearchActivity
-import com.example.playlistmaker.media.LibraryActivity
+import com.example.playlistmaker.media.activity.MediaActivity
 import com.example.playlistmaker.settings.ui.activity.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         imageSearch.setOnClickListener { navigateTo(SearchActivity::class.java) }
-        imageLibrary.setOnClickListener { navigateTo(LibraryActivity::class.java) }
+        imageLibrary.setOnClickListener { navigateTo(MediaActivity::class.java) }
         imageSettings.setOnClickListener { navigateTo(SettingsActivity::class.java) }
 
     }
