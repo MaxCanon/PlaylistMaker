@@ -3,10 +3,7 @@ package com.example.playlistmaker.util
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.di.playerModule
-import com.example.playlistmaker.di.searchModule
-import com.example.playlistmaker.di.settingsModule
-import com.example.playlistmaker.di.sharingModule
+import com.example.playlistmaker.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -33,7 +30,7 @@ class App : Application() {
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@App)
-            modules(listOf(playerModule, searchModule, settingsModule, sharingModule))
+            modules(listOf(playerModule, searchModule, settingsModule, sharingModule, mediaModule))
         }
 
         sharedMemory = getSharedPreferences(EXAMPLE_PREFERENCES, MODE_PRIVATE)

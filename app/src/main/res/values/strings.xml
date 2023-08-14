@@ -25,5 +25,12 @@
     <string name="genre_track">Жанр</string>
     <string name="country_track">Страна</string>
     <string name="time_030">0:30</string>
+    <string name="media">Медиатека</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="media_empty">Ваша медиатека пуста</string>
+    <string name="no_playlists">Вы не создали \n ни одного плейлиста</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="favourite_tracks">Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
 
 </resources>
