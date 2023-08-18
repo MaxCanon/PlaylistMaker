@@ -8,7 +8,9 @@
         android:id="@+id/settings_toolbar"
         style="@style/Toolbar">
 
-        <TextView style="@style/TextView" />
+        <TextView
+            style="@style/TextView"
+            android:text="@string/input_hint" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
