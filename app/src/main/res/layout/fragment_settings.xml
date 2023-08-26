@@ -1,43 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/SettingsPageBackground"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackgroundColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".settings.ui.fragment.SettingsFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_toolbar"
-        style="@style/ToolbarArrowColor"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginBottom="24dp">
+        style="@style/Toolbar"
+        android:layout_height="?attr/actionBarSize">
 
         <TextView
-            style="@style/ToolbarTextColor"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/settings"
-            android:textSize="@dimen/text_size22"
-            android:textStyle="bold" />
+            style="@style/TextView"
+            android:text="@string/settings" />
 
     </androidx.appcompat.widget.Toolbar>
 
-    <FrameLayout
+    <Switch
+        android:id="@+id/switchTheme"
+        style="@style/TextViewStyle_Settings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            style="@style/Settings_Texts"
-            android:layout_marginEnd="70dp"
-            android:text="@string/night_theme" />
-
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/night_theme"
-            style="@style/Settings_Images"/>
-
-    </FrameLayout>
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="16dp"
+        android:text="@string/night_theme"
+        tools:ignore="UseSwitchCompatOrMaterialXml,VisualLintButtonSize" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -54,6 +42,7 @@
 
 
     </FrameLayout>
+
 
     <FrameLayout
         android:layout_width="match_parent"
