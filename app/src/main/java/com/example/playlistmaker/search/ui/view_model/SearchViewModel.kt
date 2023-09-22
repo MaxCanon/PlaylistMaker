@@ -28,6 +28,7 @@ class SearchViewModel(
     private var latestSearchText: String? = null
 
     private var searchJob: Job? = null
+
     init {
         historyList.addAll(searchInteractor.getHistory())
         _stateLive.postValue(SearchState.SearchHistory(historyList))
@@ -67,10 +68,14 @@ class SearchViewModel(
             tracks.isEmpty() -> {
                 renderState(SearchState.SearchError(error = NetworkError.EMPTY_RESULT))
             }
+            else -> {
+                renderState(SearchState.SearchedTracks(tracks))
             }
         }
-        private fun renderState(state: SearchState) {
-            _stateLive.postValue(state)
+    }
+
+    private fun renderState(state: SearchState) {
+        _stateLive.postValue(state)
     }
 
 
