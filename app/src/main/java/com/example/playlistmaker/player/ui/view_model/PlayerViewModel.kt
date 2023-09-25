@@ -1,16 +1,13 @@
 package com.example.playlistmaker.player.ui.view_model
 
-import android.os.Handler
-import android.os.Looper
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.*
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.player.domain.interactor.PlayerInteractor
 import com.example.playlistmaker.util.App.Companion.formatTime
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(val playerInteractor: PlayerInteractor) : ViewModel() {
 
@@ -19,46 +16,48 @@ class PlayerViewModel(val playerInteractor: PlayerInteractor) : ViewModel() {
 
     private val _timeLiveData = MutableLiveData<String>()
     fun observeTime(): LiveData<String> = _timeLiveData
-    private val handler = Handler(Looper.getMainLooper())
 
-    private val time = object : Runnable {
-        override fun run() {
-            val position = playerInteractor.getPosition()
-            _timeLiveData.postValue(position.formatTime())
-            handler.postDelayed(this, DELAY_MILLIS)
+    private var timerJob: Job? = null
+
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (isActive) {
+                delay(DELAY_MILLIS)
+                _timeLiveData.postValue(playerInteractor.getPosition().formatTime())
+            }
         }
     }
 
     init {
         playerInteractor.setOnStateChangeListener { state ->
             _stateLiveData.postValue(state)
-            if (state == PlayerState.STATE_COMPLETE) handler.removeCallbacks(time)
+            if (state == PlayerState.STATE_COMPLETE) timerJob?.cancel()
         }
     }
 
 
     fun prepare(url: String) {
-        handler.removeCallbacks(time)
+        timerJob?.cancel()
         playerInteractor.preparePlayer(url)
     }
 
     fun play() {
         playerInteractor.startPlayer()
-        handler.post(time)
+        startTimer()
     }
 
     fun pause() {
         playerInteractor.pausePlayer()
-        handler.removeCallbacks(time)
+        timerJob?.cancel()
     }
 
     fun release() {
         playerInteractor.reset()
-        handler.removeCallbacks(time)
+        timerJob?.cancel()
     }
 
     companion object {
-        private const val DELAY_MILLIS = 1000L
+        private const val DELAY_MILLIS = 300L
 
     }
 }
