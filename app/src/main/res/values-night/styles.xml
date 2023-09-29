@@ -253,8 +253,6 @@
         <item name="android:layout_marginStart">@dimen/margin63dp</item>
         <item name="android:layout_marginEnd">@dimen/margin8dp</item>
         <item name="android:layout_marginBottom">@dimen/margin84dp</item>
-        <item name="android:src">@drawable/like_button_dark</item>
-        <item name="android:tint">@color/white</item>
     </style>
 
     <style name="audio_player_artist_name">
@@ -378,4 +376,9 @@
         <item name="android:trackTint">@color/switch_compat_knob_night</item>
         <item name="android:thumbTint">@color/switch_compat_knob_night</item>
     </style>
+
+    <style name="player_toolbar">
+        <item name="navigationIconTint">@color/white</item>
+    </style>
+
 </resources>

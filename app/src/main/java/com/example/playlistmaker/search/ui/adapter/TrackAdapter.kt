@@ -3,13 +3,22 @@ package com.example.playlistmaker.search.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.model.Track
 import com.example.playlistmaker.search.ui.holder.TrackHolder
+import com.example.playlistmaker.search.ui.tracksDiff.TracksDiffCallback
 
 class TrackAdapter(private val clickListener: MovieClickListener) : RecyclerView.Adapter<TrackHolder>() {
-    var trackList = ArrayList<Track>()
+
+    var tracks = mutableListOf<Track>()
+        set(newTracks) {
+            val diffCallback = TracksDiffCallback(field, newTracks)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            field = newTracks
+            diffResult.dispatchUpdatesTo(this)
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackHolder {
         val item: View =
@@ -22,16 +31,16 @@ class TrackAdapter(private val clickListener: MovieClickListener) : RecyclerView
     }
 
     override fun onBindViewHolder(holder: TrackHolder, position: Int) {
-        val trackPosition  = trackList[position]
+        val trackPosition  = tracks[position]
         holder.bind(trackPosition)
         holder.itemView.setOnClickListener {
             // addTrack(trackPosition)
-            clickListener.onMovieClick(trackList[position])
+            clickListener.onMovieClick(tracks[position])
         }
     }
 
     override fun getItemCount(): Int {
-        return trackList.size
+        return tracks.size
     }
 
     fun interface MovieClickListener {
@@ -39,6 +48,6 @@ class TrackAdapter(private val clickListener: MovieClickListener) : RecyclerView
     }
 
     fun clearTracks () {
-        trackList = ArrayList()
+        tracks = ArrayList()
     }
 }

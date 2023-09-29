@@ -12,7 +12,10 @@ import org.koin.dsl.module
 val playerModule = module {
 
     viewModel {
-        PlayerViewModel(get())
+        PlayerViewModel(
+            favouriteTracksInteractor = get(),
+            playerInteractor = get()
+        )
     }
 
     single<PlayerInteractor> {
