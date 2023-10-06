@@ -316,6 +316,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginTop">50dp</item>
     </style>
 
     <style name="problem_network">
@@ -353,6 +354,8 @@
         <item name="android:layout_weight">1</item>
         <item name="android:orientation">vertical</item>
         <item name="android:paddingTop">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+
     </style>
 
     <style name="font_style">
