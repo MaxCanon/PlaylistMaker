@@ -335,7 +335,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="navigationIconTint">@color/main_text</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:layout_marginBottom">24dp</item>
     </style>
 
     <style name="TextView">
@@ -353,7 +352,6 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:paddingHorizontal" tools:ignore="NewApi">16dp</item>
         <item name="android:paddingTop">24dp</item>
     </style>
 
@@ -366,7 +364,7 @@
     <style name="tabLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">#F5F5F5</item>
+        <item name="android:background">@color/white</item>
         <item name="tabTextAppearance">@style/font_style</item>
         <item name="tabTextColor">@color/black</item>
         <item name="tabIndicatorColor">@color/black</item>
