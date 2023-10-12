@@ -253,8 +253,6 @@
         <item name="android:layout_marginStart">@dimen/margin63dp</item>
         <item name="android:layout_marginEnd">@dimen/margin8dp</item>
         <item name="android:layout_marginBottom">@dimen/margin84dp</item>
-        <item name="android:src">@drawable/like_button_dark</item>
-        <item name="android:tint">@color/white</item>
     </style>
 
     <style name="audio_player_artist_name">
@@ -301,6 +299,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginTop">50dp</item>
     </style>
 
     <style name="searchHistory_recyclerView">
@@ -308,8 +307,8 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:paddingHorizontal">16dp</item>
         <item name="android:paddingTop">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
     </style>
 
     <style name="background_settings">
@@ -323,7 +322,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="navigationIconTint">@color/white</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:layout_marginBottom">24dp</item>
     </style>
 
     <style name="TextView">
@@ -378,4 +376,9 @@
         <item name="android:trackTint">@color/switch_compat_knob_night</item>
         <item name="android:thumbTint">@color/switch_compat_knob_night</item>
     </style>
+
+    <style name="player_toolbar">
+        <item name="navigationIconTint">@color/white</item>
+    </style>
+
 </resources>

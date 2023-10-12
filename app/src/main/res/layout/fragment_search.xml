@@ -55,7 +55,6 @@
             android:id="@+id/searchRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
             android:paddingTop="24dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
@@ -93,25 +92,34 @@
                 app:cornerRadius="54dp" />
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/searchHistory_layout"
             style="@style/searchHistory_layout"
             android:visibility="gone">
 
-            <TextView style="@style/SearchHistory" />
+            <TextView style="@style/SearchHistory"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/searchHistoryRecycler"/>
 
             <androidx.recyclerview.widget.RecyclerView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/searchHistoryRecycler"
                 style="@style/searchHistory_recyclerView"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <Button
+                app:layout_constraintTop_toBottomOf="@id/searchHistoryRecycler"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/clearHistoryButton"
                 style="@style/ClearHistory"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/ys_display_medium"
                 android:text="@string/clear_history"
                 app:cornerRadius="54dp" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </LinearLayout>

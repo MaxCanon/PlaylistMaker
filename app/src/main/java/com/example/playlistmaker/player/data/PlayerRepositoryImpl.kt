@@ -3,10 +3,12 @@ package com.example.playlistmaker.player.data
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.player.domain.repository.PlayerRepository
+import kotlinx.coroutines.Job
 
-class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer): PlayerRepository {
+class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : PlayerRepository {
 
     private var stateCallback: ((PlayerState) -> Unit)? = null
+    private var timerJob: Job? = null
 
     override fun preparePlayer(url: String) {
         mediaPlayer.setDataSource(url)
@@ -33,11 +35,9 @@ class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer): PlayerReposito
         mediaPlayer.reset()
     }
 
-    override fun getPosition(): Long {
-        return mediaPlayer.currentPosition.toLong()
-    }
+    override fun getPosition() = mediaPlayer.currentPosition.toLong()
 
     override fun setOnStateChangeListener(callback: (PlayerState) -> Unit) {
-        stateCallback =callback
+        stateCallback = callback
     }
 }

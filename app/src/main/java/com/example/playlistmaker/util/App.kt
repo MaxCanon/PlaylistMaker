@@ -13,10 +13,7 @@ import java.util.*
 
 class App : Application() {
     companion object {
-        private const val EXAMPLE_PREFERENCES = "example_preferences"
-        const val KEY_THEME = "key"
         lateinit var sharedMemory: SharedPreferences
-        const val TRACK = "track"
         fun Long.formatTime() : String {
             return SimpleDateFormat("mm:ss", Locale.getDefault()).format(this)
         }
@@ -30,7 +27,7 @@ class App : Application() {
         startKoin {
             androidLogger(Level.DEBUG)
             androidContext(this@App)
-            modules(listOf(playerModule, searchModule, settingsModule, sharingModule, mediaModule))
+            modules(listOf(playerModule, searchModule, settingsModule, sharingModule, mediaModule, dbModule))
         }
 
         sharedMemory = getSharedPreferences(EXAMPLE_PREFERENCES, MODE_PRIVATE)
