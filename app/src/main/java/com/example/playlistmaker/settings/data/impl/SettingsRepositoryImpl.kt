@@ -1,17 +1,34 @@
 package com.example.playlistmaker.settings.data.impl
 
-import com.example.playlistmaker.settings.data.storage.SettingsThemeStorage
-import com.example.playlistmaker.settings.domain.model.ThemeSettings
-import com.example.playlistmaker.settings.domain.repository.SettingsRepository
+import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.settings.data.api.SettingsRepository
+import com.example.playlistmaker.settings.domain.ThemeSettings
 
-class SettingsRepositoryImpl(private val storage: SettingsThemeStorage): SettingsRepository {
+class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences) :
+    SettingsRepository {
 
-    override fun getThemeSettings(): ThemeSettings {
-        return storage.getThemeSettings()
-    }
+    override fun getThemeSettings() =
+        ThemeSettings(sharedPreferences.getBoolean(DARK_THEME_ENABLED, false))
 
     override fun updateThemeSetting(settings: ThemeSettings) {
-        storage.saveThemeSettings(settings)
+        sharedPreferences.edit()
+            .putBoolean(DARK_THEME_ENABLED, settings.darkThemeEnabled)
+            .apply()
+        applyAppTheme()
     }
 
+    override fun applyAppTheme() {
+        AppCompatDelegate.setDefaultNightMode(
+            if (getThemeSettings().darkThemeEnabled) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
+    }
+
+    companion object {
+        private const val DARK_THEME_ENABLED = "DARK_THEME_ENABLED"
+    }
 }

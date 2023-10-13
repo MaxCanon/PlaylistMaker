@@ -1,60 +1,85 @@
 package com.example.playlistmaker.search.data.impl
 
-import com.example.playlistmaker.search.data.network.NetworkClient
-import com.example.playlistmaker.search.data.network.TrackResponse
-import com.example.playlistmaker.search.data.network.TrackSearchRequest
-import com.example.playlistmaker.search.data.storage.SearchHistoryStorage
-import com.example.playlistmaker.search.domain.model.NetworkError
+import com.example.playlistmaker.R
+import com.example.playlistmaker.favorites.data.db.AppDatabase
+import com.example.playlistmaker.search.data.LocalStorage
+import com.example.playlistmaker.search.data.NetworkClient
+import com.example.playlistmaker.search.data.api.SearchRepository
+import com.example.playlistmaker.search.data.dto.SearchRequest
+import com.example.playlistmaker.search.data.dto.SearchResponse
 import com.example.playlistmaker.search.domain.model.Track
-import com.example.playlistmaker.search.domain.repository.SearchRepository
-import com.example.playlistmaker.util.Resource
+import com.example.playlistmaker.utils.DateUtils.formatTime
+import com.example.playlistmaker.utils.DateUtils.getYear
+import com.example.playlistmaker.utils.Resource
+import com.example.playlistmaker.utils.ResourceProvider
+import com.example.playlistmaker.utils.TextUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.koin.core.component.KoinComponent
+import org.koin.core.parameter.parametersOf
 
 class SearchRepositoryImpl(
-    private val networkClient: NetworkClient, private val
-    searchHistoryStorage: SearchHistoryStorage
-) : SearchRepository {
-    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
+    private val localStorage: LocalStorage,
+    private val appDatabase: AppDatabase,
+    private val networkClient: NetworkClient,
+    private val resourceProvider: ResourceProvider
+) : SearchRepository, KoinComponent {
 
-        val response = networkClient.doRequest( TrackSearchRequest(expression))
-
+    override fun searchTracks(query: String): Flow<Resource<List<Track>>> = flow {
+        val searchRequest: SearchRequest = getKoin().get {
+            parametersOf(query)
+        }
+        val response = networkClient.doRequest(searchRequest)
         when (response.resultCode) {
-            -1 -> {
-                emit(Resource.Error("Проверьте подключение к интернету"))
+            NO_CONNECTIVITY_ERROR -> {
+                emit(Resource.Error(resourceProvider.getString(R.string.no_internet_connection)))
             }
 
-            200 -> {
-                with(response as TrackResponse) {
-                    val data = results.map {
-                        Track(
-                            it.trackId,
-                            it.trackName,
-                            it.artistName,
-                            it.trackTimeMillis,
-                            it.artworkUrl100,
-                            it.collectionName,
-                            it.releaseDate,
-                            it.primaryGenreName,
-                            it.country,
-                            it.previewUrl
-                        )
-                    }
-                    emit(Resource.Success(data))
-                }
+            SUCCESSFUL_SEARCH_CODE -> {
+                val favoritesIds = appDatabase.favoritesDao().getFavoritesIds()
+                emit(Resource.Success((response as SearchResponse).trackList.map {
+                    Track(
+                        it.trackId,
+                        it.trackName,
+                        it.artistName,
+                        it.country,
+                        it.releaseDate ?: "",
+                        getYear(it.releaseDate) ?: "",
+                        formatTime(it.duration),
+                        it.artworkUri,
+                        TextUtils.getHighResArtwork(it.artworkUri),
+                        it.genre,
+                        it.album,
+                        it.previewUrl,
+                        favoritesIds.contains(it.trackId)
+                    )
+                }))
             }
 
             else -> {
-                emit(Resource.Error("Ошибка сервера"))
+                emit(Resource.Error(resourceProvider.getString(R.string.server_error)))
             }
         }
     }
 
-    override fun getHistory(): List<Track> {
-        return searchHistoryStorage.getHistory()
+    override fun getSearchHistory(): Flow<List<Track>> = flow {
+        val searchHistory = localStorage.getSearchHistory()
+        val favoritesIds = appDatabase.favoritesDao().getFavoritesIds()
+        emit(searchHistory.map {
+            it.copy(isFavorite = favoritesIds.contains(it.trackId))
+        })
     }
 
-    override fun saveHistory(tracks: List<Track>) {
-        searchHistoryStorage.saveHistory(tracks)
+    override fun clearSearchHistory() {
+        localStorage.clearSearchHistory()
+    }
+
+    override fun addTrackToSearchHistory(track: Track) {
+        localStorage.addTrackToSearchHistory(track)
+    }
+
+    companion object {
+        const val SUCCESSFUL_SEARCH_CODE = 200
+        const val NO_CONNECTIVITY_ERROR = -1
     }
 }

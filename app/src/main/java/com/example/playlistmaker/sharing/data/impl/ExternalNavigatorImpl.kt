@@ -4,37 +4,34 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
-import com.example.playlistmaker.R
+import com.example.playlistmaker.sharing.data.ExternalNavigator
 import com.example.playlistmaker.sharing.domain.model.EmailData
-import com.example.playlistmaker.sharing.domain.repository.ExternalNavigator
 
-class ExternalNavigatorImpl (private val context: Context) : ExternalNavigator {
-
-    val emailSubject = context.getString(R.string.message_to_develops_1)
-    val emailText = context.getString(R.string.message_to_develops_2)
+class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
 
     override fun shareLink(shareAppLink: String) {
-        Intent().addFlags(FLAG_ACTIVITY_NEW_TASK).apply {
-            action = Intent.ACTION_SEND
+        Intent(Intent.ACTION_SEND).apply {
             putExtra(Intent.EXTRA_TEXT, shareAppLink)
             type = "text/plain"
-            context.startActivity(this, null)
+            addFlags(FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(this)
         }
     }
 
     override fun openLink(termsLink: String) {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(termsLink))
-            .addFlags(FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(browserIntent)
+        Intent(Intent.ACTION_VIEW, Uri.parse(termsLink)).apply {
+            addFlags(FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(this)
+        }
     }
 
     override fun openEmail(supportEmailData: EmailData) {
-        Intent().addFlags(FLAG_ACTIVITY_NEW_TASK).apply {
-            action = Intent.ACTION_SENDTO
+        Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(supportEmailData.mail))
-            putExtra(Intent.EXTRA_SUBJECT, emailSubject)
-            putExtra(Intent.EXTRA_TEXT, emailText)
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(supportEmailData.email))
+            putExtra(Intent.EXTRA_SUBJECT, supportEmailData.subject)
+            putExtra(Intent.EXTRA_TEXT, supportEmailData.textMessage)
+            addFlags(FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(this)
         }
     }
