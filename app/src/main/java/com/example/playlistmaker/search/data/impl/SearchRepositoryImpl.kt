@@ -25,7 +25,9 @@ class SearchRepositoryImpl(
     private val resourceProvider: ResourceProvider
 ) : SearchRepository, KoinComponent {
 
-    override fun searchTracks(query: String): Flow<Resource<List<Track>>> = flow {
+    override fun searchTracks(
+        query: String
+    ): Flow<Resource<List<Track>>> = flow {
         val searchRequest: SearchRequest = getKoin().get {
             parametersOf(query)
         }
@@ -45,7 +47,8 @@ class SearchRepositoryImpl(
                         it.country,
                         it.releaseDate ?: "",
                         getYear(it.releaseDate) ?: "",
-                        formatTime(it.duration),
+                        it.duration ?: 0,
+                        TextUtils.getLowResArtwork(it.artworkUri),
                         it.artworkUri,
                         TextUtils.getHighResArtwork(it.artworkUri),
                         it.genre,

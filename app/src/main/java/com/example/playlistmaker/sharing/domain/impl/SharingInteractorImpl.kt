@@ -12,7 +12,7 @@ class SharingInteractorImpl(
 ) : SharingInteractor {
 
     override fun shareApp() {
-        externalNavigator.shareLink(getShareAppLink())
+        externalNavigator.shareString(getShareAppLink())
     }
 
     override fun openTerms() {
@@ -23,6 +23,9 @@ class SharingInteractorImpl(
         externalNavigator.openEmail(getSupportEmailData())
     }
 
+    override fun shareString(sharedTracksString: String) {
+        externalNavigator.shareString(sharedTracksString)
+    }
     private fun getShareAppLink() = resourceProvider.getString(R.string.practicum_android_link)
 
     private fun getSupportEmailData() = EmailData(

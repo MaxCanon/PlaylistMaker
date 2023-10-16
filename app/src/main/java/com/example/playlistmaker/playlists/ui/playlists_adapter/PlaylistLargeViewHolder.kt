@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.playlists_creation.domain.model.Playlist
+import com.example.playlistmaker.playlist_creation.domain.model.Playlist
 import com.example.playlistmaker.utils.TextUtils
 
 class PlaylistLargeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,7 +27,12 @@ class PlaylistLargeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
             )
             .into(cover)
         name.text = playlist.name
-        numberOfTracks.text = TextUtils.numberOfTracksString(playlist.numberOfTracks)
+        numberOfTracks.text =
+            itemView.resources.getQuantityString(
+                R.plurals.plurals_tracks,
+                playlist.numberOfTracks,
+                playlist.numberOfTracks
+            )
     }
 
 }

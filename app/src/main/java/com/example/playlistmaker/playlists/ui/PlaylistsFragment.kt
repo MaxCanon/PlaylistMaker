@@ -13,10 +13,11 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.playlists.ui.playlists_adapter.PlaylistsLargeAdapter
 import com.example.playlistmaker.playlists.view_model.PlaylistsState
 import com.example.playlistmaker.playlists.view_model.PlaylistsViewModel
-import com.example.playlistmaker.playlists_creation.domain.model.Playlist
+import com.example.playlistmaker.playlist_creation.domain.model.Playlist
 import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.playlist_details.ui.PlaylistDetailsFragment
 
 class PlaylistsFragment : Fragment() {
 
@@ -59,7 +60,10 @@ class PlaylistsFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope,
             false
         ) { playlist ->
-            //todo implement onClick
+            findNavController().navigate(
+                R.id.action_mediaFragment_to_playlistDetailsFragment,
+                PlaylistDetailsFragment.createArgs(playlist.playlistId)
+            )
         }
     }
 

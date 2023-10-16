@@ -2,7 +2,7 @@ package com.example.playlistmaker.favorites.data
 
 import com.example.playlistmaker.favorites.data.converters.TrackDbConverter
 import com.example.playlistmaker.favorites.data.db.AppDatabase
-import com.example.playlistmaker.favorites.data.db.entity.TrackEntity
+import com.example.playlistmaker.favorites.data.db.entity.FavoritesTrackEntity
 import com.example.playlistmaker.favorites.domain.api.FavoritesRepository
 import com.example.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +20,7 @@ class FavoritesRepositoryImpl(
     }
 
     override suspend fun deleteFavorite(track: Track) {
-        database.favoritesDao()
-            .deleteFavorite(trackDbConverter.map(track, Calendar.getInstance().time.time))
+        database.favoritesDao().deleteFavorite(trackDbConverter.map(track, Calendar.getInstance().time.time))
     }
 
     override fun getFavorites(): Flow<List<Track>> = flow {
@@ -29,6 +28,6 @@ class FavoritesRepositoryImpl(
         emit(convertFromTrackEntity(tracks))
     }
 
-    private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> =
+    private fun convertFromTrackEntity(tracks: List<FavoritesTrackEntity>): List<Track> =
         tracks.sortedByDescending { it.addingTime }.map { track -> trackDbConverter.map(track) }
 }
