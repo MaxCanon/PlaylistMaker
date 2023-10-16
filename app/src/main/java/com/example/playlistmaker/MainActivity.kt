@@ -25,23 +25,41 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.mediaFragment,
-                R.id.favoritesFragment,
-                R.id.playlistsFragment,
-                R.id.settingsFragment,
-                R.id.searchFragment -> bottomNavigationView.visibility = View.VISIBLE
+                R.id.mediaFragment -> {
+                    bottomNavigationView.visibility = View.VISIBLE
+                    divider.visibility = View.VISIBLE
+                }
+                R.id.favoritesFragment -> {
+                    bottomNavigationView.visibility = View.VISIBLE
+                    divider.visibility = View.VISIBLE
+                }
+                R.id.playlistsFragment -> {
+                    bottomNavigationView.visibility = View.VISIBLE
+                    divider.visibility = View.VISIBLE
+                }
+                R.id.settingsFragment -> {
+                    bottomNavigationView.visibility = View.VISIBLE
+                    divider.visibility = View.VISIBLE
+                }
+                R.id.searchFragment -> {
+                    bottomNavigationView.visibility = View.VISIBLE
+                    divider.visibility = View.VISIBLE
+                }
                 R.id.playlistCreationFragment -> {
                     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                     bottomNavigationView.visibility = View.GONE
                     divider.visibility = View.GONE
-                    
+
                 }
                 R.id.playerFragment -> {
                     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                     bottomNavigationView.visibility = View.GONE
                     divider.visibility = View.GONE
                 }
-                else -> bottomNavigationView.visibility = View.GONE
+                else -> {
+                    bottomNavigationView.visibility = View.GONE
+                    divider.visibility = View.GONE
+                }
             }
         }
     }
