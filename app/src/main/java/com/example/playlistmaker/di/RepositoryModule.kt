@@ -1,31 +1,56 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.favorites.data.FavoritesRepositoryImpl
-import com.example.playlistmaker.favorites.data.converters.TrackDbConverter
-import com.example.playlistmaker.favorites.domain.api.FavoritesRepository
-import com.example.playlistmaker.playlist_details.data.PlaylistRepositoryImpl
-import com.example.playlistmaker.playlist_details.domain.api.PlaylistRepository
-import com.example.playlistmaker.playlist_creation.data.converters.PlaylistDbConverter
-import com.example.playlistmaker.playlist_creation.data.db.PlaylistsRepositoryImpl
-import com.example.playlistmaker.playlist_creation.data.local_files.PlaylistsFilesRepositoryImpl
-import com.example.playlistmaker.playlist_creation.domain.api.db.PlaylistsRepository
-import com.example.playlistmaker.playlist_creation.domain.api.local_files.PlaylistsFilesRepository
-import com.example.playlistmaker.search.data.api.SearchRepository
-import com.example.playlistmaker.search.data.impl.SearchRepositoryImpl
-import com.example.playlistmaker.settings.data.api.SettingsRepository
+import com.example.playlistmaker.media.data.impl.FavouritesRepositoryImpl
+import com.example.playlistmaker.media.data.impl.PlaylistRepositoryImpl
+import com.example.playlistmaker.media.data.mapper.PlaylistDbMapper
+import com.example.playlistmaker.media.data.mapper.PlaylistTrackDbMapper
+import com.example.playlistmaker.media.data.mapper.TrackDbMapper
+import com.example.playlistmaker.media.domain.api.FavouritesRepository
+import com.example.playlistmaker.media.domain.api.PlaylistRepository
+import com.example.playlistmaker.player.data.MediaPlayerRepositoryImpl
+import com.example.playlistmaker.player.domain.api.MediaPlayerRepository
+import com.example.playlistmaker.search.data.impl.HistoryRepositoryImpl
+import com.example.playlistmaker.search.data.impl.TrackRepositoryImpl
+import com.example.playlistmaker.search.domain.api.HistoryRepository
+import com.example.playlistmaker.search.domain.api.TrackRepository
 import com.example.playlistmaker.settings.data.impl.SettingsRepositoryImpl
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
+import com.example.playlistmaker.settings.domain.SettingsRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
+    factory<MediaPlayerRepository> {
+        MediaPlayerRepositoryImpl(get())
+    }
 
-    singleOf(::SearchRepositoryImpl) bind SearchRepository::class
-    singleOf(::SettingsRepositoryImpl) bind SettingsRepository::class
-    singleOf(::TrackDbConverter)
-    singleOf(::FavoritesRepositoryImpl) bind FavoritesRepository::class
-    singleOf(::PlaylistDbConverter)
-    singleOf(::PlaylistsRepositoryImpl) bind PlaylistsRepository::class
-    singleOf(::PlaylistsFilesRepositoryImpl) bind PlaylistsFilesRepository::class
-    singleOf(::PlaylistRepositoryImpl) bind PlaylistRepository::class
+    single<HistoryRepository> {
+        HistoryRepositoryImpl(get(), get())
+    }
+
+    single<TrackRepository> {
+        TrackRepositoryImpl(get(), get())
+    }
+
+    single<SettingsRepository> {
+        SettingsRepositoryImpl(get())
+    }
+
+    single<FavouritesRepository> {
+        FavouritesRepositoryImpl(get(), get())
+    }
+
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get(), get())
+    }
+
+    factory {
+        TrackDbMapper()
+    }
+
+    factory {
+        PlaylistDbMapper(get())
+    }
+
+    factory {
+        PlaylistTrackDbMapper()
+    }
 }
