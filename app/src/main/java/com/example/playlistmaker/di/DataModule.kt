@@ -2,74 +2,64 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.net.ConnectivityManager
+import android.os.Environment
 import androidx.room.Room
-import com.example.playlistmaker.favorites.data.db.AppDatabase
-import com.example.playlistmaker.player.data.PlayerImpl
-import com.example.playlistmaker.player.domain.api.Player
-import com.example.playlistmaker.playlists_creation.data.local_files.PrivateStorage
-import com.example.playlistmaker.playlists_creation.data.local_files.PrivateStorageImpl
-import com.example.playlistmaker.search.data.LocalStorage
-import com.example.playlistmaker.search.data.NetworkClient
-import com.example.playlistmaker.search.data.dto.SearchRequest
-import com.example.playlistmaker.search.data.network.ItunesService
-import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.search.data.sharedprefs.LocalStorageImpl
 import com.google.gson.Gson
+import com.example.playlistmaker.media.data.AppDatabase
+import com.example.playlistmaker.media.data.impl.ExternalNavigatorMediaImpl
+import com.example.playlistmaker.media.domain.api.ExternalNavigatorMedia
+import com.example.playlistmaker.search.data.NetworkClient
+import com.example.playlistmaker.search.data.network.ITunesApi
+import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.sharing.data.impl.ExternalNavigatorImpl
+import com.example.playlistmaker.sharing.domain.ExternalNavigator
+import com.example.playlistmaker.utils.QUALIFIER_IMAGE_DIRECTORY
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 val dataModule = module {
-
-    single<Player> {
-        PlayerImpl(get())
-    }
-
-    single<LocalStorage> {
-        LocalStorageImpl(get(), get())
+    single<ITunesApi> {
+        Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://itunes.apple.com")
+            .build()
+            .create(ITunesApi::class.java)
     }
 
     single<NetworkClient> {
-        RetrofitNetworkClient(get(), get())
+        RetrofitNetworkClient(get())
     }
 
-    single {
-        Gson()
-    }
-
-    single {
-        MediaPlayer()
-    }
-
-    factory { (query: String) ->
-        SearchRequest(query)
-    }
-
-    single<ItunesService> {
-        Retrofit.Builder()
-            .baseUrl(RetrofitNetworkClient.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ItunesService::class.java)
+    single<ExternalNavigator> {
+        ExternalNavigatorImpl(androidContext())
     }
 
     single {
         androidContext()
-            .getSharedPreferences("shared_preference", Context.MODE_PRIVATE)
+            .getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
     }
 
     single {
-        androidContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 
-    single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
+    single(named(QUALIFIER_IMAGE_DIRECTORY)) {
+        File(
+            androidContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            "playlistImage"
+        ).apply { if (!exists()) mkdirs() }
     }
 
-    single<PrivateStorage> {
-        PrivateStorageImpl(androidContext())
+    single<ExternalNavigatorMedia> {
+        ExternalNavigatorMediaImpl(androidContext())
     }
 
+    factory { Gson() }
+
+    factory { MediaPlayer() }
 }

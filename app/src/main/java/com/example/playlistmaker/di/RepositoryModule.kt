@@ -1,42 +1,56 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.favorites.data.FavoritesRepositoryImpl
-import com.example.playlistmaker.favorites.data.converters.TrackDbConverter
-import com.example.playlistmaker.favorites.domain.api.FavoritesRepository
-import com.example.playlistmaker.playlists_creation.data.converters.PlaylistDbConverter
-import com.example.playlistmaker.playlists_creation.data.db.PlaylistsRepositoryImpl
-import com.example.playlistmaker.playlists_creation.data.local_files.PlaylistsFilesRepositoryImpl
-import com.example.playlistmaker.playlists_creation.domain.api.db.PlaylistsRepository
-import com.example.playlistmaker.playlists_creation.domain.api.local_files.PlaylistsFilesRepository
-import com.example.playlistmaker.search.data.api.SearchRepository
-import com.example.playlistmaker.search.data.impl.SearchRepositoryImpl
-import com.example.playlistmaker.settings.data.api.SettingsRepository
+import com.example.playlistmaker.media.data.impl.FavouritesRepositoryImpl
+import com.example.playlistmaker.media.data.impl.PlaylistRepositoryImpl
+import com.example.playlistmaker.media.data.mapper.PlaylistDbMapper
+import com.example.playlistmaker.media.data.mapper.PlaylistTrackDbMapper
+import com.example.playlistmaker.media.data.mapper.TrackDbMapper
+import com.example.playlistmaker.media.domain.api.FavouritesRepository
+import com.example.playlistmaker.media.domain.api.PlaylistRepository
+import com.example.playlistmaker.player.data.MediaPlayerRepositoryImpl
+import com.example.playlistmaker.player.domain.api.MediaPlayerRepository
+import com.example.playlistmaker.search.data.impl.HistoryRepositoryImpl
+import com.example.playlistmaker.search.data.impl.TrackRepositoryImpl
+import com.example.playlistmaker.search.domain.api.HistoryRepository
+import com.example.playlistmaker.search.domain.api.TrackRepository
 import com.example.playlistmaker.settings.data.impl.SettingsRepositoryImpl
+import com.example.playlistmaker.settings.domain.SettingsRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
+    factory<MediaPlayerRepository> {
+        MediaPlayerRepositoryImpl(get())
+    }
 
-    single<SearchRepository> {
-        SearchRepositoryImpl(get(), get(), get(), get())
+    single<HistoryRepository> {
+        HistoryRepositoryImpl(get(), get())
+    }
+
+    single<TrackRepository> {
+        TrackRepositoryImpl(get(), get())
     }
 
     single<SettingsRepository> {
         SettingsRepositoryImpl(get())
     }
 
-    single { TrackDbConverter() }
-
-    single<FavoritesRepository> {
-        FavoritesRepositoryImpl(get(), get())
+    single<FavouritesRepository> {
+        FavouritesRepositoryImpl(get(), get())
     }
 
-    single { PlaylistDbConverter() }
-
-    single<PlaylistsRepository> {
-        PlaylistsRepositoryImpl(get(), get(), get())
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get(), get())
     }
 
-    single<PlaylistsFilesRepository> {
-        PlaylistsFilesRepositoryImpl(get())
+    factory {
+        TrackDbMapper()
+    }
+
+    factory {
+        PlaylistDbMapper(get())
+    }
+
+    factory {
+        PlaylistTrackDbMapper()
     }
 }
